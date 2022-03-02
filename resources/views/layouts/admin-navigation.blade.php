@@ -15,6 +15,11 @@
                     <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    <x-nav-link :href="route('admin.keys.index')" :active="request()->routeIs('admin.keys.index')">
+                        ショートカットキー管理
+                    </x-nav-link>
+
                 </div>
             </div>
 
