@@ -4,14 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Key; //Eloquent エロクアント
+use Illuminate\Support\Facades\DB; //QueryBuilder クエリビルダー
+
 
 class KeysController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
 
     public function __construct()
     {
@@ -20,7 +18,15 @@ class KeysController extends Controller
 
     public function index()
     {
-        dd('オーナ');
+        $e_all = Key::all();
+        $q_get = DB::table('keys')->select('content')->get();
+        $q_first = DB::table('keys')->select('content')->first();
+        $c_test = collect([
+            'key_1' => 'Ctrl'
+        ]);
+        var_dump($q_first);
+
+        dd($e_all, $q_get, $q_first, $c_test);
     }
 
     /**
