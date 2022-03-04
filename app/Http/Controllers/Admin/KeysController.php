@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Key; //Eloquent エロクアント
 use Illuminate\Support\Facades\DB; //QueryBuilder クエリビルダー
+use Carbon\Carbon;
 
 
 class KeysController extends Controller
@@ -18,15 +19,26 @@ class KeysController extends Controller
 
     public function index()
     {
-        $e_all = Key::all();
-        $q_get = DB::table('keys')->select('content')->get();
-        $q_first = DB::table('keys')->select('content')->first();
-        $c_test = collect([
-            'key_1' => 'Ctrl'
-        ]);
-        var_dump($q_first);
+        // $date_now = Carbon::now();
+        // $date_parse = Carbon::parse(now());
+        // echo $date_now->year;
+        // echo $date_parse;
 
-        dd($e_all, $q_get, $q_first, $c_test);
+        $e_all = Key::all();
+        $q_get = DB::table('keys')->select('key_1', 'key_2', 'key_3', 'key_4', 'note', 'content', 'created_at')->get();
+        // $q_first = DB::table('keys')->select('name')->first();
+
+        // $c_test = collect([
+        //     'key_1' => 'Ctrl'
+        // ]);
+
+        // var_dump($q_first);
+
+        // dd($e_all, $q_get, $q_first, $c_test);
+        return view(
+            'admin.keys.index',
+            compact('e_all', 'q_get')
+        );
     }
 
     /**
