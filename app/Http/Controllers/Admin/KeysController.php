@@ -24,8 +24,8 @@ class KeysController extends Controller
         // echo $date_now->year;
         // echo $date_parse;
 
-        $e_all = Key::all();
-        $q_get = DB::table('keys')->select('key_1', 'key_2', 'key_3', 'key_4', 'note', 'content', 'created_at')->get();
+        // $e_all = Key::all();
+        // $q_get = DB::table('keys')->select('key_1', 'key_2', 'key_3', 'key_4', 'note', 'content', 'created_at')->get();
         // $q_first = DB::table('keys')->select('name')->first();
 
         // $c_test = collect([
@@ -35,9 +35,11 @@ class KeysController extends Controller
         // var_dump($q_first);
 
         // dd($e_all, $q_get, $q_first, $c_test);
+
+        $keys = Key::select('key_1', 'key_2', 'key_3', 'key_4', 'note', 'content', 'created_at')->get();
         return view(
             'admin.keys.index',
-            compact('e_all', 'q_get')
+            compact('keys')
         );
     }
 
@@ -48,7 +50,7 @@ class KeysController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.keys.create');
     }
 
     /**
