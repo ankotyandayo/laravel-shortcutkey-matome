@@ -7,3 +7,4 @@
 | 管理者用 controllerの追加                    | admin-3         |  
 | migrationファイル追加、seederファイル追加     | Keystable       | 
 | 管理者用のCRUD機能の追加                      | ResourceOfAdmin |      
+| ヘッダーの編集　　                           | modification    |      

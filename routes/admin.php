@@ -22,12 +22,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('admin.welcome');
-});
+// Route::get('/', function () {
+//     return view('admin.welcome');
+// });
 
 Route::resource('keys', KeysController::class)
-    ->middleware('auth:admin');
+    ->middleware('auth:admin')->except(['show']);
 
 
 Route::get('/dashboard', function () {
