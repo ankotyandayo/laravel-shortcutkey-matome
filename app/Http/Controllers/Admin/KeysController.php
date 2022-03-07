@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Key; //Eloquent エロクアント
 use Illuminate\Support\Facades\DB; //QueryBuilder クエリビルダー
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+
 
 
 class KeysController extends Controller
@@ -36,7 +38,7 @@ class KeysController extends Controller
 
         // dd($e_all, $q_get, $q_first, $c_test);
 
-        $keys = Key::select('key_1', 'key_2', 'key_3', 'key_4', 'note', 'content', 'created_at')->get();
+        $keys = Key::select('id', 'key_1', 'key_2', 'key_3', 'key_4', 'note', 'content', 'created_at')->get();
         return view(
             'admin.keys.index',
             compact('keys')
@@ -61,7 +63,27 @@ class KeysController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'key_1' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+
+        Key::create([
+            'key_1' => $request->key_1,
+            'key_2' => $request->key_2,
+            'key_3' => $request->key_3,
+            'key_4' => $request->key_4,
+            'note' => $request->note,
+            'content' => $request->content,
+            'admin_id' => Auth::id(),
+        ]);
+
+        return redirect()
+            ->route('admin.keys.create')
+            ->with([
+                'message' => 'キー登録を実施しました。',
+                'status' => 'info'
+            ]);
     }
 
     /**
@@ -83,7 +105,8 @@ class KeysController extends Controller
      */
     public function edit($id)
     {
-        //
+        $key = Key::findOrFail($id);
+        return view('admin.keys.edit', compact('key'));
     }
 
     /**
@@ -95,7 +118,21 @@ class KeysController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $key = Key::findOrFail($id);
+        $key->key_1 =  $request->key_1;
+        $key->key_2 =  $request->key_2;
+        $key->key_3 =  $request->key_3;
+        $key->key_4 =  $request->key_4;
+        $key->note =  $request->note;
+        $key->content =  $request->content;
+        $key->save();
+
+        return redirect()
+            ->route('admin.keys.index')
+            ->with([
+                'message' => 'キー情報を更新しました。',
+                'status' => 'info'
+            ]);
     }
 
     /**
@@ -106,6 +143,13 @@ class KeysController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Key::findOrFail($id)->delete();
+
+        return redirect()
+            ->route('admin.keys.index')
+            ->with([
+                'message' => 'キー情報を削除しました。',
+                'status' => 'alert'
+            ]);
     }
 }
