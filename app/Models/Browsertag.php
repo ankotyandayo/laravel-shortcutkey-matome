@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Browsertag extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'admin_id',
+    ];
 }

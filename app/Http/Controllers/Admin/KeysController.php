@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Key; //Eloquent エロクアント
+use App\Models\KeyTag;
+use App\Models\Tag;
 use Illuminate\Support\Facades\DB; //QueryBuilder クエリビルダー
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-
+use Throwable;
+use Illuminate\Support\Facades\Log;
 
 
 class KeysController extends Controller
@@ -21,24 +24,10 @@ class KeysController extends Controller
 
     public function index()
     {
-        // $date_now = Carbon::now();
-        // $date_parse = Carbon::parse(now());
-        // echo $date_now->year;
-        // echo $date_parse;
-
-        // $e_all = Key::all();
-        // $q_get = DB::table('keys')->select('key_1', 'key_2', 'key_3', 'key_4', 'note', 'content', 'created_at')->get();
-        // $q_first = DB::table('keys')->select('name')->first();
-
-        // $c_test = collect([
-        //     'key_1' => 'Ctrl'
-        // ]);
-
-        // var_dump($q_first);
-
-        // dd($e_all, $q_get, $q_first, $c_test);
-
-        $keys = Key::select('id', 'key_1', 'key_2', 'key_3', 'key_4', 'note', 'content', 'created_at')->get();
+        $keys = Key::select('id', 'key_1', 'key_2', 'key_3', 'key_4', 'note', 'content')
+            ->whereNull('deleted_at')
+            ->orderBy('updated_at', 'DESC')
+            ->get();
         return view(
             'admin.keys.index',
             compact('keys')
@@ -52,7 +41,12 @@ class KeysController extends Controller
      */
     public function create()
     {
-        return view('admin.keys.create');
+        $tags = Tag::where('admin_id', '=', \Auth::id())->orderBy('id', 'DESC')->get();
+
+        return view(
+            'admin.keys.create',
+            compact('tags')
+        );
     }
 
     /**
@@ -63,20 +57,44 @@ class KeysController extends Controller
      */
     public function store(Request $request)
     {
+        $posts = $request->all();
+
         $request->validate([
             'key_1' => 'required|string|max:255',
             'content' => 'required|string',
         ]);
+        //  ===== ここからトランザクション開始======
+        try {
+            DB::transaction(function () use ($posts) {
+                $key = Key::create([
+                    'key_1' => $posts['key_1'],
+                    'key_2' => $posts['key_2'],
+                    'key_3' => $posts['key_3'],
+                    'key_4' => $posts['key_4'],
+                    'note' => $posts['note'],
+                    'content' => $posts['content'],
+                    'admin_id' => Auth::id(),
+                ]);
+                $tag_exists = Tag::where('name', '=', $posts['new_tag'])->exists();
+                if (!empty($posts['new_tag']) || $posts['new_tag'] === "0" && !$tag_exists) {
+                    $tag = Tag::create([
+                        'name' => $posts['new_tag'],
+                        'admin_id' => Auth::id(),
+                    ]);
 
-        Key::create([
-            'key_1' => $request->key_1,
-            'key_2' => $request->key_2,
-            'key_3' => $request->key_3,
-            'key_4' => $request->key_4,
-            'note' => $request->note,
-            'content' => $request->content,
-            'admin_id' => Auth::id(),
-        ]);
+                    KeyTag::insert([
+                        'key_id' => $key['id'],
+                        'tag_id' => $tag['id'],
+                    ]);
+                }
+            });
+        } catch (Throwable $e) {
+            Log::error($e);
+            throw $e;
+        }
+        //  ===== ここからトランザクション終了======
+
+
 
         return redirect()
             ->route('admin.keys.create')

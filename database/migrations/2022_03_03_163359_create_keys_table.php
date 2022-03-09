@@ -24,7 +24,7 @@ class CreateKeysTable extends Migration
             $table->unsignedBigInteger('admin_id');
             // 論理削除を定義→deleted_atを自動生成
             $table->softDeletes();
-            // timestampと書いてしまうと、レコード挿入時、更新時に値が入らないので、DB::rawで直接書いてます
+            // timestampと書いてしまうと、レコード挿入時、更新時に値が入らないので、DB::rawで直接書く
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->foreign('admin_id')->references('id')->on('admins');
