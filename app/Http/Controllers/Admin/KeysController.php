@@ -12,7 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Validation\Rules\Exists;
 
 class KeysController extends Controller
 {
@@ -59,10 +59,11 @@ class KeysController extends Controller
     {
         $posts = $request->all();
 
-        $request->validate([
-            'key_1' => 'required|string|max:255',
-            'content' => 'required|string',
-        ]);
+        // $request->validate([
+        //     'key_1' => 'required|string|max:255',
+        //     'content' => 'required|string',
+        // ]);
+
         //  ===== ここからトランザクション開始======
         try {
             DB::transaction(function () use ($posts) {
@@ -87,6 +88,13 @@ class KeysController extends Controller
                         'tag_id' => $tag['id'],
                     ]);
                 }
+                // if (!empty($posts['existing_tag'])) {
+                $tag = $posts['existing_tag'];
+                KeyTag::insert([
+                    'key_id' => $key['id'],
+                    'tag_id' => $tag,
+                ]);
+                // }
             });
         } catch (Throwable $e) {
             Log::error($e);
@@ -124,7 +132,20 @@ class KeysController extends Controller
     public function edit($id)
     {
         $key = Key::findOrFail($id);
-        return view('admin.keys.edit', compact('key'));
+
+        $key_tag = Key::select('keys.*', 'tags.id AS tag_id', 'tags.name')
+            ->leftJoin('key_tags', 'key_tags.key_id', '=', 'keys.id')
+            ->leftJoin('tags', 'key_tags.tag_id', '=', 'tags.id')
+            ->where('keys.id', '=', $id)
+            ->find($id);
+        dd($key_tag);
+        // $include_tags = [];
+        // foreach ($key_tag as $tag) {
+        //     array_push($include_tags, $tag['tag_id']);
+        // }
+        $tags = Tag::where('admin_id', '=', \Auth::id())->orderBy('id', 'DESC')->get();
+        dd($tags);
+        // return view('admin.keys.edit', compact('key', 'include_tags', 'tags'));
     }
 
     /**
@@ -136,6 +157,16 @@ class KeysController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $posts = $request->all();
+        try {
+            DB::transaction(
+                function () use ($posts) {
+                }
+            );
+        } catch (Throwable $e) {
+            Log::error($e);
+            throw $e;
+        }
         $key = Key::findOrFail($id);
         $key->key_1 =  $request->key_1;
         $key->key_2 =  $request->key_2;
