@@ -96,9 +96,11 @@
                                                             class="leading-7 text-sm text-gray-600">Existing_tag
                                                             <select class="form-select w-full" id="existing_tag"
                                                                 name="existing_tag">
+                                                                <option class="font-semibold text-indigo-700">未選択
+                                                                </option>
                                                                 @foreach ($tags as $tag)
                                                                     <option value="{{ $tag->id }}"
-                                                                        {{ in_array($tag['id'], $include_tags) ? 'selected' : '' }}>
+                                                                        {{ $tag['id'] == $key['tag_id'] ? 'selected' : '' }}>
                                                                         {{ $tag->name }}
                                                                     </option>
                                                                 @endforeach
