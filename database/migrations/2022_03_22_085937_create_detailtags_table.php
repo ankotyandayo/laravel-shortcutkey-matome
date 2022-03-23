@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBrowsertagsTable extends Migration
+class CreateDetailtagsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateBrowsertagsTable extends Migration
      */
     public function up()
     {
-        Schema::create('browsertags', function (Blueprint $table) {
+        Schema::create('detailtags', function (Blueprint $table) {
             $table->unsignedBigInteger('id', true);
             $table->string('name');
             $table->unsignedBigInteger('admin_id');
@@ -31,6 +31,6 @@ class CreateBrowsertagsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('browsertags');
+        Schema::dropIfExists('detailtags');
     }
 }

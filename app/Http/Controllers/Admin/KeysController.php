@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Key; //Eloquent エロクアント
 use App\Models\KeyTag;
 use App\Models\Tag;
+use App\Models\TagDetailtag;
+use App\Models\Detailtag;
 use Illuminate\Support\Facades\DB; //QueryBuilder クエリビルダー
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -42,10 +44,11 @@ class KeysController extends Controller
     public function create()
     {
         $tags = Tag::where('admin_id', '=', \Auth::id())->orderBy('id', 'DESC')->get();
+        $detailtags = Detailtag::where('admin_id', '=', \Auth::id())->orderBy('id', 'DESC')->get();
 
         return view(
             'admin.keys.create',
-            compact('tags')
+            compact('tags', 'detailtags')
         );
     }
 
@@ -58,6 +61,7 @@ class KeysController extends Controller
     public function store(Request $request)
     {
         $posts = $request->all();
+        // dd($posts);
 
         // $request->validate([
         //     'key_1' => 'required|string|max:255',
@@ -67,7 +71,7 @@ class KeysController extends Controller
         //  ===== ここからトランザクション開始======
         try {
             DB::transaction(function () use ($posts) {
-                $key = Key::create([
+                $key = Key::insertGetId([
                     'key_1' => $posts['key_1'],
                     'key_2' => $posts['key_2'],
                     'key_3' => $posts['key_3'],
@@ -76,32 +80,54 @@ class KeysController extends Controller
                     'content' => $posts['content'],
                     'admin_id' => Auth::id(),
                 ]);
+                //  ===== メインタグ======
                 $tag_exists = Tag::where('name', '=', $posts['new_tag'])->exists();
                 if (!empty($posts['new_tag']) && !$tag_exists) {
-                    $tag = Tag::create([
+                    $tag = Tag::insertGetId([
                         'name' => $posts['new_tag'],
                         'admin_id' => Auth::id(),
                     ]);
 
                     KeyTag::insert([
-                        'key_id' => $key['id'],
-                        'tag_id' => $tag['id'],
+                        'key_id' => $key,
+                        'tag_id' => $tag,
                     ]);
                 } else {
                     // if (!empty($posts['existing_tag'])) {
                     $tag = $posts['existing_tag'];
                     KeyTag::insert([
-                        'key_id' => $key['id'],
+                        'key_id' => $key,
                         'tag_id' => $tag,
                     ]);
                     // }
+                }
+                //  ===== 詳細タグ======
+                $detail_tag_exists = detailtag::where('name', '=', $posts['new_detail_tag'])->exists();
+                if (!empty($posts['new_detail_tag']) && !$detail_tag_exists) {
+                    $detailtag = Detailtag::insertGetId([
+                        'name' => $posts['new_detail_tag'],
+                        'admin_id' => Auth::id(),
+                    ]);
+
+                    TagDetailtag::insert([
+                        'tag_id' => $tag,
+                        'detailtag_id' => $detailtag,
+                    ]);
+                } else {
+                    if (!empty($posts['existing_detail_tag'])) {
+                        $detailtag = $posts['existing_detail_tag'];
+                        TagDetailtag::insert([
+                            'tag_id' => $tag,
+                            'detailtag_id' => $detailtag,
+                        ]);
+                    }
                 }
             });
         } catch (Throwable $e) {
             Log::error($e);
             throw $e;
         }
-        //  ===== ここからトランザクション終了======
+        //  ===== ここでトランザクション終了======
 
 
 
@@ -145,9 +171,11 @@ class KeysController extends Controller
         //     array_push($include_tags, $tag['tag_id']);
         // }
         $tags = Tag::where('admin_id', '=', \Auth::id())->orderBy('id', 'DESC')->get();
+        $detailtags = Detailtag::where('admin_id', '=', \Auth::id())->orderBy('id', 'DESC')->get();
+
         // dd($tags);
 
-        return view('admin.keys.edit', compact('key', 'tags'));
+        return view('admin.keys.edit', compact('key', 'tags', 'detailtags'));
     }
 
     /**
@@ -163,18 +191,18 @@ class KeysController extends Controller
         try {
             DB::transaction(
                 function () use ($posts, $id) {
-                    // ===== ここからメインタグの編集開始======
+                    // ===== メインタグ======
                     KeyTag::where('key_id', '=', $id)->delete();
                     $tag_exists = Tag::where('name', '=', $posts['new_tag'])->exists();
                     if (!empty($posts['new_tag']) && !$tag_exists) {
-                        $tag = Tag::create([
+                        $tag = Tag::insertGetId([
                             'name' => $posts['new_tag'],
                             'admin_id' => Auth::id(),
                         ]);
 
                         KeyTag::insert([
                             'key_id' => $id,
-                            'tag_id' => $tag['id'],
+                            'tag_id' => $tag,
                         ]);
                     } else {
                         KeyTag::insert([
@@ -182,8 +210,25 @@ class KeysController extends Controller
                             'tag_id' => $posts['existing_tag'],
                         ]);
                     }
-                    // ===== ここからメインタグの編集終了======
+                    // ===== 詳細タグ======
+                    KeyTag::where('key_id', '=', $id)->delete();
+                    $tag_exists = Tag::where('name', '=', $posts['new_tag'])->exists();
+                    if (!empty($posts['new_tag']) && !$tag_exists) {
+                        $tag = Tag::insertGetId([
+                            'name' => $posts['new_tag'],
+                            'admin_id' => Auth::id(),
+                        ]);
 
+                        KeyTag::insert([
+                            'key_id' => $id,
+                            'tag_id' => $tag,
+                        ]);
+                    } else {
+                        KeyTag::insert([
+                            'key_id' => $id,
+                            'tag_id' => $posts['existing_tag'],
+                        ]);
+                    }
                 }
             );
         } catch (Throwable $e) {

@@ -5,7 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TagGmailtag extends Model
+class Detailtag extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'admin_id',
+    ];
 }

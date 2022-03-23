@@ -23,6 +23,7 @@
                                     @csrf
                                     <div class="flex flex-wrap -m-2">
                                         <div class="flex">
+                                            {{-- ===== ここからキー入力エリア開始====== --}}
                                             <div class="flex flex-wrap -m-2 w-1/2">
                                                 <div class="p-2 w-1/4">
                                                     <div class="relative">
@@ -77,9 +78,11 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            {{-- ===== ここでキー入力エリア終了====== --}}
                                             <div class="p-4">
 
                                             </div>
+                                            {{-- ===== ここからタグ入力エリア開始====== --}}
                                             <div class="flex flex-wrap -m-2 w-1/2">
                                                 <div class="p-2 w-3/5">
                                                     <div class="relative">
@@ -93,7 +96,7 @@
                                                 <div class="p-2 w-2/5">
                                                     <div class="relative">
                                                         <label for="existing_tag"
-                                                            class="leading-7 text-sm text-gray-600">Existing_tag
+                                                            class="leading-7 text-sm text-gray-600">Existing_Tag
                                                             <select class="form-select w-full" id="existing_tag"
                                                                 name="existing_tag">
                                                                 <option class="font-semibold text-indigo-700">未選択
@@ -109,6 +112,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            {{-- ===== ここでタグ入力エリア終了====== --}}
                                         </div>
                                     </div>
                                     <div class="p-2 w-full flex justify-around mt-4">

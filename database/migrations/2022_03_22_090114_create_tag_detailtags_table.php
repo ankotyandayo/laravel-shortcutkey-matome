@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTagWindowstagsTable extends Migration
+class CreateTagDetailtagsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateTagWindowstagsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tag_windowstags', function (Blueprint $table) {
+        Schema::create('tag_detailtags', function (Blueprint $table) {
             $table->unsignedBigInteger('tag_id');
-            $table->unsignedBigInteger('windowstag_id');
+            $table->unsignedBigInteger('detailtag_id');
 
             $table->foreign('tag_id')->references('id')->on('tags');
-            $table->foreign('windowstag_id')->references('id')->on('windowstags');
+            $table->foreign('detailtag_id')->references('id')->on('detailtags');
         });
     }
 
@@ -29,6 +29,6 @@ class CreateTagWindowstagsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tag_windowstags');
+        Schema::dropIfExists('tag_detailtags');
     }
 }
