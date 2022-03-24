@@ -14,9 +14,11 @@ class CreateTagDetailtagsTable extends Migration
     public function up()
     {
         Schema::create('tag_detailtags', function (Blueprint $table) {
+            $table->unsignedBigInteger('key_id');
             $table->unsignedBigInteger('tag_id');
             $table->unsignedBigInteger('detailtag_id');
 
+            $table->foreign('key_id')->references('id')->on('keys');
             $table->foreign('tag_id')->references('id')->on('tags');
             $table->foreign('detailtag_id')->references('id')->on('detailtags');
         });
