@@ -166,6 +166,8 @@ class KeysController extends Controller
         $key = Key::select('keys.*', 'tags.id AS tag_id', 'tags.name')
             ->leftJoin('key_tags', 'key_tags.key_id', '=', 'keys.id')
             ->leftJoin('tags', 'key_tags.tag_id', '=', 'tags.id')
+            ->leftJoin('tag_detailtags', 'tag_detailtags.key_id', '=', 'keys.id')
+            ->leftJoin('detailtags', 'tag_detailtags.detailtag_id', '=', 'detailtags.id')
             ->where('keys.id', '=', $id)
             ->findOrFail($id);
         // dd($key);
@@ -211,15 +213,15 @@ class KeysController extends Controller
                             'name' => $posts['new_tag'],
                             'admin_id' => Auth::id(),
                         ]);
-
                         KeyTag::insert([
                             'key_id' => $id,
                             'tag_id' => $tag,
                         ]);
                     } else {
+                        $tag = $posts['existing_tag'];
                         KeyTag::insert([
                             'key_id' => $id,
-                            'tag_id' => $posts['existing_tag'],
+                            'tag_id' => $tag,
                         ]);
                     }
                     // ===== 詳細タグ======
@@ -230,18 +232,20 @@ class KeysController extends Controller
                             'name' => $posts['new_detail_tag'],
                             'admin_id' => Auth::id(),
                         ]);
-
                         TagDetailtag::insert([
                             'key_id' => $id,
                             'tag_id' => $tag,
                             'detailtag_id' => $detailtag,
                         ]);
                     } else {
-                        TagDetailtag::insert([
-                            'key_id' => $id,
-                            'tag_id' => $tag,
-                            'detailtag_id' => $posts['existing_detail_tag'],
-                        ]);
+                        if (!empty($posts['existing_detail_tag'])) {
+                            $detailtag = $posts['existing_detail_tag'];
+                            TagDetailtag::insert([
+                                'key_id' => $id,
+                                'tag_id' => $tag,
+                                'detailtag_id' => $detailtag,
+                            ]);
+                        }
                     }
                 }
             );
