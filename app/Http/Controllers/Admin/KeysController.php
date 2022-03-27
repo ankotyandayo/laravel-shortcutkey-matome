@@ -163,7 +163,7 @@ class KeysController extends Controller
     {
         // $key = Key::findOrFail($id);
 
-        $key = Key::select('keys.*', 'tags.id AS tag_id', 'tags.name')
+        $key = Key::select('keys.*', 'tags.id AS tag_id', 'detailtags.id AS detailtag_id',)
             ->leftJoin('key_tags', 'key_tags.key_id', '=', 'keys.id')
             ->leftJoin('tags', 'key_tags.tag_id', '=', 'tags.id')
             ->leftJoin('tag_detailtags', 'tag_detailtags.key_id', '=', 'keys.id')
@@ -271,6 +271,7 @@ class KeysController extends Controller
     public function destroy($id)
     {
         KeyTag::where('key_id', '=', $id)->delete();
+        TagDetailtag::where('key_id', '=', $id)->delete();
         Key::findOrFail($id)->delete();
 
         return redirect()

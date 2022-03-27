@@ -99,7 +99,7 @@
                                                             class="leading-7 text-sm text-gray-600">Existing_Tag
                                                             <select class="form-select w-full" id="existing_tag"
                                                                 name="existing_tag">
-                                                                <option class="font-semibold text-indigo-700">未選択
+                                                                <option class="font-semibold text-indigo-700">
                                                                 </option>
                                                                 @foreach ($tags as $tag)
                                                                     <option value="{{ $tag->id }}"
