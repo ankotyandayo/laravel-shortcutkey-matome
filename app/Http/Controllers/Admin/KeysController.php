@@ -71,6 +71,7 @@ class KeysController extends Controller
         //  ===== ここからトランザクション開始======
         try {
             DB::transaction(function () use ($posts) {
+                //  ===== キーの登録======
                 $key = Key::insertGetId([
                     'key_1' => $posts['key_1'],
                     'key_2' => $posts['key_2'],
@@ -93,7 +94,7 @@ class KeysController extends Controller
                         'tag_id' => $tag,
                     ]);
                 } else {
-                    // if (!empty($posts['existing_tag'])) {
+                    // if (!empty($posts['_detail'])) {
                     $tag = $posts['existing_tag'];
                     KeyTag::insert([
                         'key_id' => $key,
@@ -110,6 +111,7 @@ class KeysController extends Controller
                     ]);
 
                     TagDetailtag::insert([
+                        'key_id' => $key,
                         'tag_id' => $tag,
                         'detailtag_id' => $detailtag,
                     ]);
@@ -117,6 +119,7 @@ class KeysController extends Controller
                     if (!empty($posts['existing_detail_tag'])) {
                         $detailtag = $posts['existing_detail_tag'];
                         TagDetailtag::insert([
+                            'key_id' => $key,
                             'tag_id' => $tag,
                             'detailtag_id' => $detailtag,
                         ]);
@@ -160,9 +163,11 @@ class KeysController extends Controller
     {
         // $key = Key::findOrFail($id);
 
-        $key = Key::select('keys.*', 'tags.id AS tag_id', 'tags.name')
+        $key = Key::select('keys.*', 'tags.id AS tag_id', 'detailtags.id AS detailtag_id',)
             ->leftJoin('key_tags', 'key_tags.key_id', '=', 'keys.id')
             ->leftJoin('tags', 'key_tags.tag_id', '=', 'tags.id')
+            ->leftJoin('tag_detailtags', 'tag_detailtags.key_id', '=', 'keys.id')
+            ->leftJoin('detailtags', 'tag_detailtags.detailtag_id', '=', 'detailtags.id')
             ->where('keys.id', '=', $id)
             ->findOrFail($id);
         // dd($key);
@@ -191,6 +196,15 @@ class KeysController extends Controller
         try {
             DB::transaction(
                 function () use ($posts, $id) {
+                    //  ===== キーの編集======
+                    $key = Key::findOrFail($id);
+                    $key->key_1 =  $posts['key_1'];
+                    $key->key_2 =  $posts['key_2'];
+                    $key->key_3 =  $posts['key_3'];
+                    $key->key_4 =  $posts['key_4'];
+                    $key->note =  $posts['note'];
+                    $key->content =  $posts['content'];
+                    $key->save();
                     // ===== メインタグ======
                     KeyTag::where('key_id', '=', $id)->delete();
                     $tag_exists = Tag::where('name', '=', $posts['new_tag'])->exists();
@@ -199,35 +213,39 @@ class KeysController extends Controller
                             'name' => $posts['new_tag'],
                             'admin_id' => Auth::id(),
                         ]);
-
                         KeyTag::insert([
                             'key_id' => $id,
                             'tag_id' => $tag,
                         ]);
                     } else {
+                        $tag = $posts['existing_tag'];
                         KeyTag::insert([
                             'key_id' => $id,
-                            'tag_id' => $posts['existing_tag'],
+                            'tag_id' => $tag,
                         ]);
                     }
                     // ===== 詳細タグ======
-                    KeyTag::where('key_id', '=', $id)->delete();
-                    $tag_exists = Tag::where('name', '=', $posts['new_tag'])->exists();
-                    if (!empty($posts['new_tag']) && !$tag_exists) {
-                        $tag = Tag::insertGetId([
-                            'name' => $posts['new_tag'],
+                    TagDetailtag::where('key_id', '=', $id)->delete();
+                    $detail_tag_exists = Detailtag::where('name', '=', $posts['new_detail_tag'])->exists();
+                    if (!empty($posts['new_detail_tag']) && !$detail_tag_exists) {
+                        $detailtag = Detailtag::insertGetId([
+                            'name' => $posts['new_detail_tag'],
                             'admin_id' => Auth::id(),
                         ]);
-
-                        KeyTag::insert([
+                        TagDetailtag::insert([
                             'key_id' => $id,
                             'tag_id' => $tag,
+                            'detailtag_id' => $detailtag,
                         ]);
                     } else {
-                        KeyTag::insert([
-                            'key_id' => $id,
-                            'tag_id' => $posts['existing_tag'],
-                        ]);
+                        if (!empty($posts['existing_detail_tag'])) {
+                            $detailtag = $posts['existing_detail_tag'];
+                            TagDetailtag::insert([
+                                'key_id' => $id,
+                                'tag_id' => $tag,
+                                'detailtag_id' => $detailtag,
+                            ]);
+                        }
                     }
                 }
             );
@@ -235,14 +253,6 @@ class KeysController extends Controller
             Log::error($e);
             throw $e;
         }
-        $key = Key::findOrFail($id);
-        $key->key_1 =  $request->key_1;
-        $key->key_2 =  $request->key_2;
-        $key->key_3 =  $request->key_3;
-        $key->key_4 =  $request->key_4;
-        $key->note =  $request->note;
-        $key->content =  $request->content;
-        $key->save();
 
         return redirect()
             ->route('admin.keys.index')
@@ -261,6 +271,7 @@ class KeysController extends Controller
     public function destroy($id)
     {
         KeyTag::where('key_id', '=', $id)->delete();
+        TagDetailtag::where('key_id', '=', $id)->delete();
         Key::findOrFail($id)->delete();
 
         return redirect()
