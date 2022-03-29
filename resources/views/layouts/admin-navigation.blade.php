@@ -1,43 +1,31 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-black border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
+                {{-- <div class="shrink-0 flex items-center">
                     <a href="{{ route('admin.dashboard') }}">
                         <x-application-logo class="block h-10 w-auto fill-current text-gray-600" />
                     </a>
-                </div>
+                </div> --}}
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                <div class="hidden space-x-8 sm:-my-px {{-- sm:ml-10 --}} sm:flex">
+                    {{-- <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                         {{ __('Dashboard') }}
-                    </x-nav-link>
+                    </x-nav-link> --}}
 
                     <x-nav-link :href="route('admin.keys.index')" :active="request()->routeIs('admin.keys.index')">
                         {{ __('ショートカットキー一覧') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('admin.keys.index')" :active="request()->routeIs('admin.keys.index')">
-                        Excel
-                    </x-nav-link>
-                    <x-nav-link :href="route('admin.keys.index')" :active="request()->routeIs('admin.keys.index')">
-                        VSC
-                    </x-nav-link>
-                    <x-nav-link :href="route('admin.keys.index')" :active="request()->routeIs('admin.keys.index')">
-                        Windows
-                    </x-nav-link>
-                    <x-nav-link :href="route('admin.keys.index')" :active="request()->routeIs('admin.keys.index')">
-                        Explorer
-                    </x-nav-link>
-                    <x-nav-link :href="route('admin.keys.index')" :active="request()->routeIs('admin.keys.index')">
-                        ブラウザ
-                    </x-nav-link>
-                    <x-nav-link :href="route('admin.keys.index')" :active="request()->routeIs('admin.keys.index')">
-                        Gmail
-                    </x-nav-link>
-
+                    @foreach ($tags as $tag)
+                        <x-nav-link :href="route('admin.keys.index')" :active="request()->routeIs('admin.keys.index')">
+                            <span value="{{ $tag->id }}">
+                                {{ $tag->name }}
+                            </span>
+                        </x-nav-link>
+                    @endforeach
                 </div>
             </div>
 
@@ -50,8 +38,7 @@
                             <div>{{ Auth::user()->name }}</div>
 
                             <div class="ml-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"
                                         d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                                         clip-rule="evenodd" />
@@ -92,30 +79,15 @@
 
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+        <div class="{{-- pt-2 pb-3 space-y-1 --}}">
+            {{-- <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                 {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+            </x-responsive-nav-link> --}}
             <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                 ショートカットキー一覧
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                 Excel
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
-                VSC
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
-                Windows
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
-                Explorer
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
-                ブラウザ
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
-                Gmail
             </x-responsive-nav-link>
         </div>
 
