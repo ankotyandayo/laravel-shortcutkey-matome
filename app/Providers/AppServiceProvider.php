@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Models\Tag;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        view()->composer('*', function ($view) {
+            $tags = Tag::where('admin_id', '=', \Auth::id())->orderBy('id', 'DESC')->get();
+
+            $view->with('tags', $tags);
+        });
     }
 }

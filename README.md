@@ -9,4 +9,4 @@
 | 管理者用のCRUD機能の追加                      | ResourceOfAdmin |      
 | ヘッダーの編集　　                           | modification    |      
 | タグ機能の追加　　                           | addTag           |      
-| ヘッダーフッターの修正　　                    | header-footer   |      
+| ヘッダーフッターの修正(kanel>appserviceprovider   | header-footer   |      

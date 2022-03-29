@@ -43,12 +43,11 @@ class KeysController extends Controller
      */
     public function create()
     {
-        $tags = Tag::where('admin_id', '=', \Auth::id())->orderBy('id', 'DESC')->get();
         $detailtags = Detailtag::where('admin_id', '=', \Auth::id())->orderBy('id', 'DESC')->get();
 
         return view(
             'admin.keys.create',
-            compact('tags', 'detailtags')
+            compact('detailtags')
         );
     }
 
@@ -175,12 +174,11 @@ class KeysController extends Controller
         // foreach ($key_tag as $tag) {
         //     array_push($include_tags, $tag['tag_id']);
         // }
-        $tags = Tag::where('admin_id', '=', \Auth::id())->orderBy('id', 'DESC')->get();
         $detailtags = Detailtag::where('admin_id', '=', \Auth::id())->orderBy('id', 'DESC')->get();
 
         // dd($tags);
 
-        return view('admin.keys.edit', compact('key', 'tags', 'detailtags'));
+        return view('admin.keys.edit', compact('key', 'detailtags'));
     }
 
     /**

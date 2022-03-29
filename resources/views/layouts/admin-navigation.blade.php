@@ -19,9 +19,13 @@
                     <x-nav-link :href="route('admin.keys.index')" :active="request()->routeIs('admin.keys.index')">
                         {{ __('ショートカットキー一覧') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('admin.keys.index')" :active="request()->routeIs('admin.keys.index')">
-                        Excel
-                    </x-nav-link>
+                    @foreach ($tags as $tag)
+                        <x-nav-link :href="route('admin.keys.index')" :active="request()->routeIs('admin.keys.index')">
+                            <span value="{{ $tag->id }}">
+                                {{ $tag->name }}
+                            </span>
+                        </x-nav-link>
+                    @endforeach
                 </div>
             </div>
 
