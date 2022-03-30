@@ -20,7 +20,8 @@
                         {{ __('ショートカットキー一覧') }}
                     </x-nav-link>
                     @foreach ($tags as $tag)
-                        <x-nav-link :href="route('admin.keys.index')" :active="request()->routeIs('admin.keys.index')">
+                        <x-nav-link :href="route('admin.keys.index', ['tag' => $tag->id])"
+                            :active="request()->routeIs('admin.keys.index')">
                             <span value="{{ $tag->id }}">
                                 {{ $tag->name }}
                             </span>
@@ -52,6 +53,9 @@
                         <form method="POST" action="{{ route('admin.logout') }}">
                             @csrf
 
+                            <x-dropdown-link :href="route('admin.keys.create')">
+                                キー登録
+                            </x-dropdown-link>
                             <x-dropdown-link :href="route('admin.logout')" onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                                 {{ __('Log Out') }}
@@ -86,9 +90,14 @@
             <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                 ショートカットキー一覧
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
-                Excel
-            </x-responsive-nav-link>
+            @foreach ($tags as $tag)
+                <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                    <span value="{{ $tag->id }}">
+                        {{ $tag->name }}
+                    </span>
+                </x-responsive-nav-link>
+            @endforeach
+
         </div>
 
         <!-- Responsive Settings Options -->
@@ -103,6 +112,9 @@
                 <form method="POST" action="{{ route('admin.logout') }}">
                     @csrf
 
+                    <x-responsive-nav-link :href="route('admin.keys.create')">
+                        キー登録
+                    </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('admin.logout')" onclick="event.preventDefault();
                                         this.closest('form').submit();">
                         {{ __('Log Out') }}

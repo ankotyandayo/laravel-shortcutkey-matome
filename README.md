@@ -10,3 +10,4 @@
 | ヘッダーの編集　　                           | modification    |      
 | タグ機能の追加　　                           | addTag           |      
 | ヘッダーフッターの修正(kanel>appserviceprovider   | header-footer   |      
+| 一覧ページの修正                             | indexpage        |      

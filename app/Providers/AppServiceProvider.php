@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         view()->composer('*', function ($view) {
-            $tags = Tag::where('admin_id', '=', \Auth::id())->orderBy('id', 'DESC')->get();
+            $tags = Tag::where('admin_id', '=', \Auth::id())->get();
 
             $view->with('tags', $tags);
         });
