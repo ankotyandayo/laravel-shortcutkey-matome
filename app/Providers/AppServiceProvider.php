@@ -26,6 +26,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         view()->composer('*', function ($view) {
+            // \でインポートしなくても使える
+            $query_tag = \Request::query('tag');
+            dd($query_tag);
+
             $tags = Tag::where('admin_id', '=', \Auth::id())->get();
 
             $view->with('tags', $tags);
