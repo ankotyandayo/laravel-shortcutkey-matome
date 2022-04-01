@@ -26,13 +26,13 @@ class KeysController extends Controller
 
     public function index()
     {
-        $keys = Key::select('id', 'key_1', 'key_2', 'key_3', 'key_4', 'note', 'content')
-            ->whereNull('deleted_at')
-            ->orderBy('updated_at', 'DESC')
-            ->get();
+        // $keys = Key::select('id', 'key_1', 'key_2', 'key_3', 'key_4', 'note', 'content')
+        //     ->whereNull('deleted_at')
+        //     ->orderBy('updated_at', 'DESC')
+        //     ->get();
         return view(
             'admin.keys.index',
-            compact('keys')
+            //     compact('keys')
         );
     }
 
