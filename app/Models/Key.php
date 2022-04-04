@@ -35,12 +35,13 @@ class Key extends Model
         $query_tag = \Request::query('tag');
 
         if (!empty($query_tag)) {
-            $keys = Key::select('keys.*', 'detailtags.id AS detailtag_id', 'detailtags.name AS detailtag_name',)
+            $keys = Key::select('keys.*', 'tag_detailtags.detailtag_id')
                 ->leftJoin('key_tags', 'key_tags.key_id', '=', 'keys.id')
                 // ->leftJoin('tags', 'key_tags.tag_id', '=', 'tags.id')
                 ->leftJoin('tag_detailtags', 'tag_detailtags.key_id', '=', 'keys.id')
                 ->leftJoin('detailtags', 'tag_detailtags.detailtag_id', '=', 'detailtags.id')
                 ->where('key_tags.tag_id', '=', $query_tag)
+                ->orderBy('detailtag_id', 'DESC')
                 ->get();
             // dd($keys);
         } else {

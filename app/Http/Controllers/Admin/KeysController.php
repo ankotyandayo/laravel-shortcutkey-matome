@@ -30,10 +30,16 @@ class KeysController extends Controller
         //     ->whereNull('deleted_at')
         //     ->orderBy('updated_at', 'DESC')
         //     ->get();
-        return view(
-            'admin.keys.index',
-            //     compact('keys')
-        );
+        $query_tag = \Request::query('tag');
+        if (!empty($query_tag)) {
+            return view(
+                'admin.keys.index',
+            );
+        } else {
+            return view(
+                'admin.keys.create',
+            );
+        }
     }
 
     /**
@@ -43,11 +49,9 @@ class KeysController extends Controller
      */
     public function create()
     {
-        $detailtags = Detailtag::where('admin_id', '=', \Auth::id())->orderBy('id', 'DESC')->get();
-
         return view(
             'admin.keys.create',
-            compact('detailtags')
+            // compact('detailtags')
         );
     }
 
@@ -174,11 +178,8 @@ class KeysController extends Controller
         // foreach ($key_tag as $tag) {
         //     array_push($include_tags, $tag['tag_id']);
         // }
-        $detailtags = Detailtag::where('admin_id', '=', \Auth::id())->orderBy('id', 'DESC')->get();
 
-        // dd($tags);
-
-        return view('admin.keys.edit', compact('key', 'detailtags'));
+        return view('admin.keys.edit', compact('key'));
     }
 
     /**
