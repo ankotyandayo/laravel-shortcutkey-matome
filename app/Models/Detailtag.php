@@ -19,13 +19,13 @@ class Detailtag extends Model
         $query_tag = \Request::query('tag');
 
         if (!empty($query_tag)) {
-            $detailtags = Detailtag::select('detailtags.*',)
+            $detailtags = Detailtag::select('detailtags.id', 'detailtags.name')
                 ->leftJoin('tag_detailtags', 'tag_detailtags.detailtag_id', '=', 'detailtags.id')
-                ->groupBy('detailtag_id')
                 ->where('tag_id', '=', $query_tag)
                 ->orderBy('id', 'DESC')
+                ->groupBy('id', 'name')
                 ->get();
-            dd($detailtags);
+            // dd($detailtags);
         } else {
             $detailtags = Detailtag::where('admin_id', '=', \Auth::id())->orderBy('id', 'DESC')->get();
         }

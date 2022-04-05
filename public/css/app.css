@@ -800,6 +800,10 @@ select {
     margin-bottom: 1rem;
 }
 
+.mb-6 {
+    margin-bottom: 1.5rem;
+}
+
 .mt-1 {
     margin-top: 0.25rem;
 }
@@ -1114,6 +1118,10 @@ select {
     border-width: 1px;
 }
 
+.border-b-1 {
+    border-bottom: 2px solid #eeeeee;
+}
+
 .border-0 {
     border-width: 0px;
 }
@@ -1284,6 +1292,11 @@ select {
 .py-1 {
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
+}
+
+.py-8 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 
 .py-12 {
@@ -1978,4 +1991,9 @@ select {
 
 .break-word {
     overflow-wrap: break-word;
+}
+
+p {
+    color: #7b7b7b;
+    font-size: 14px;
 }
