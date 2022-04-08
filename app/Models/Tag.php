@@ -11,6 +11,7 @@ class Tag extends Model
 
     protected $fillable = [
         'name',
+        'filename',
         'admin_id',
     ];
 }

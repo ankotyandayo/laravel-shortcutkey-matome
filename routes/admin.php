@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Admin\Auth\RegisteredUserController;
 use App\Http\Controllers\Admin\Auth\VerifyEmailController;
 use App\Http\Controllers\Admin\KeysController;
+use App\Http\Controllers\Admin\TagsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,6 +29,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('keys', KeysController::class)
     ->middleware('auth:admin')->except(['show']);
+
+Route::resource('tags', TagsController::class)
+    ->middleware('auth:admin')->only(['index', 'edit', 'update']);
 
 
 Route::get('/dashboard', function () {

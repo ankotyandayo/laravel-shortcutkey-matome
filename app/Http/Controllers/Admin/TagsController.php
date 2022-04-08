@@ -4,6 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Tag;
+use Illuminate\Support\Facades\Storage;
+use InterventionImage;
+use App\Http\Requests\UploadImageRequest;
+use App\Services\ImageService;
+
+
 
 class TagsController extends Controller
 {
@@ -14,7 +21,9 @@ class TagsController extends Controller
      */
     public function index()
     {
-        //
+        return view(
+            'admin.tags.index',
+        );
     }
 
     /**
@@ -28,7 +37,7 @@ class TagsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Tag a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -57,7 +66,11 @@ class TagsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $edittag = Tag::select('tags.*')
+            ->where('tags.id', '=', $id)
+            ->findOrFail($id);
+        // dd($edittag);
+        return view('admin.tags.edit', compact('edittag'));
     }
 
     /**
@@ -67,11 +80,32 @@ class TagsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UploadImageRequest $request, $id)
     {
-        //
-    }
 
+        $imageFile = $request->image;
+        if (!is_null($imageFile) && $imageFile->isValid()) {
+            // Storage::putFile('public/tags', $imageFile); //リサイズなしの場合
+
+            $fileNameToTag = ImageService::upload($imageFile, 'tags');
+        }
+
+        $tag = Tag::findOrFail($id);
+        $tag->name = $request->name;
+        if (!is_null($imageFile) && $imageFile->isValid()) {
+            $tag->filename = $fileNameToTag;
+        }
+
+        $tag->save();
+
+
+        return redirect()
+            ->route('admin.tags.index')
+            ->with([
+                'message' => 'タグ情報を更新しました。',
+                'status' => 'info'
+            ]);
+    }
     /**
      * Remove the specified resource from storage.
      *

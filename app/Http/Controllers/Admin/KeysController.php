@@ -26,6 +26,7 @@ class KeysController extends Controller
 
     public function index()
     {
+        // phpinfo();
         // $keys = Key::select('id', 'key_1', 'key_2', 'key_3', 'key_4', 'note', 'content')
         //     ->whereNull('deleted_at')
         //     ->orderBy('updated_at', 'DESC')
@@ -254,7 +255,7 @@ class KeysController extends Controller
         }
 
         return redirect()
-            ->route('admin.keys.index')
+            ->route('admin.keys.index', ['tag' => 1])
             ->with([
                 'message' => 'キー情報を更新しました。',
                 'status' => 'info'
@@ -274,7 +275,7 @@ class KeysController extends Controller
         Key::findOrFail($id)->delete();
 
         return redirect()
-            ->route('admin.keys.index')
+            ->route('admin.keys.index', ['tag' => 1])
             ->with([
                 'message' => 'キー情報を削除しました。',
                 'status' => 'alert'

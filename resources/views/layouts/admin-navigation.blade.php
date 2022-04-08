@@ -56,6 +56,9 @@
                             <x-dropdown-link :href="route('admin.keys.create')">
                                 キー登録
                             </x-dropdown-link>
+                            <x-dropdown-link :href="route('admin.tags.index')">
+                                タグ一覧
+                            </x-dropdown-link>
                             <x-dropdown-link :href="route('admin.logout')" onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                                 {{ __('Log Out') }}
@@ -113,6 +116,9 @@
 
                     <x-responsive-nav-link :href="route('admin.keys.create')">
                         キー登録
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.tags.index')">
+                        タグ一覧
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('admin.logout')" onclick="event.preventDefault();
                                         this.closest('form').submit();">
