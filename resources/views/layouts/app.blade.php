@@ -23,11 +23,13 @@
 
         <!-- Page Heading App name-->
         <header class="bg-white shadow">
-            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                {{-- {{ $header }} --}}
-                <h2 class="font-semibold text-2xl text-gray-800 leading-tight font-Itim">
-                    ShortcutKey-Matome
-            </div>
+            <a href='{{ route('admin.dashboard') }}'>
+                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    {{-- {{ $header }} --}}
+                    <h2 class="font-semibold text-2xl text-gray-800 leading-tight font-Itim">
+                        ShortcutKey-Matome
+                </div>
+            </a>
         </header>
 
         <!-- Page Heading menu -->
