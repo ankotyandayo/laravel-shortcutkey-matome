@@ -44,6 +44,6 @@ class Admin extends Authenticatable
 
     public function keys()
     {
-        return $this->hasMany(Key::class);
+        // return $this->hasMany(Key::class);
     }
 }

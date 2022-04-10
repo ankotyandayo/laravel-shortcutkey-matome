@@ -26,14 +26,21 @@ class KeysController extends Controller
 
     public function index()
     {
-        $keys = Key::select('id', 'key_1', 'key_2', 'key_3', 'key_4', 'note', 'content')
-            ->whereNull('deleted_at')
-            ->orderBy('updated_at', 'DESC')
-            ->get();
-        return view(
-            'admin.keys.index',
-            compact('keys')
-        );
+        // phpinfo();
+        // $keys = Key::select('id', 'key_1', 'key_2', 'key_3', 'key_4', 'note', 'content')
+        //     ->whereNull('deleted_at')
+        //     ->orderBy('updated_at', 'DESC')
+        //     ->get();
+        $query_tag = \Request::query('tag');
+        if (!empty($query_tag)) {
+            return view(
+                'admin.keys.index',
+            );
+        } else {
+            return view(
+                'admin.keys.create',
+            );
+        }
     }
 
     /**
@@ -43,11 +50,9 @@ class KeysController extends Controller
      */
     public function create()
     {
-        $detailtags = Detailtag::where('admin_id', '=', \Auth::id())->orderBy('id', 'DESC')->get();
-
         return view(
             'admin.keys.create',
-            compact('detailtags')
+            // compact('detailtags')
         );
     }
 
@@ -174,11 +179,8 @@ class KeysController extends Controller
         // foreach ($key_tag as $tag) {
         //     array_push($include_tags, $tag['tag_id']);
         // }
-        $detailtags = Detailtag::where('admin_id', '=', \Auth::id())->orderBy('id', 'DESC')->get();
 
-        // dd($tags);
-
-        return view('admin.keys.edit', compact('key', 'detailtags'));
+        return view('admin.keys.edit', compact('key'));
     }
 
     /**
@@ -253,7 +255,7 @@ class KeysController extends Controller
         }
 
         return redirect()
-            ->route('admin.keys.index')
+            ->route('admin.keys.index', ['tag' => 1])
             ->with([
                 'message' => 'キー情報を更新しました。',
                 'status' => 'info'
@@ -273,7 +275,7 @@ class KeysController extends Controller
         Key::findOrFail($id)->delete();
 
         return redirect()
-            ->route('admin.keys.index')
+            ->route('admin.keys.index', ['tag' => 1])
             ->with([
                 'message' => 'キー情報を削除しました。',
                 'status' => 'alert'

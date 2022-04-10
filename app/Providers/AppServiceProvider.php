@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Models\Key;
 use App\Models\Tag;
+use App\Models\Detailtag;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -26,9 +28,19 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         view()->composer('*', function ($view) {
-            $tags = Tag::where('admin_id', '=', \Auth::id())->orderBy('id', 'DESC')->get();
+            // \でインポートしなくても使える
+            $key_model = new Key(); //インスタンス化
+            $keys = $key_model->getKey();
 
-            $view->with('tags', $tags);
+            $detailtag_model = new Detailtag(); //インスタンス化
+            $detailtags = $detailtag_model->getdetailtag();
+            $tags = Tag::where('admin_id', '=', \Auth::id())->get();
+
+            $view->with([
+                "keys" => $keys,
+                "tags" => $tags,
+                "detailtags" => $detailtags,
+            ]);
         });
     }
 }

@@ -16,11 +16,12 @@
                         {{ __('Dashboard') }}
                     </x-nav-link> --}}
 
-                    <x-nav-link :href="route('admin.keys.index')" :active="request()->routeIs('admin.keys.index')">
+                    {{-- <x-nav-link :href="route('admin.keys.index')" :active="request()->routeIs('admin.keys.index')">
                         {{ __('ショートカットキー一覧') }}
-                    </x-nav-link>
+                    </x-nav-link> --}}
                     @foreach ($tags as $tag)
-                        <x-nav-link :href="route('admin.keys.index')" :active="request()->routeIs('admin.keys.index')">
+                        {{-- <x-nav-link :href="route('admin.keys.index', ['tag' => $tag->id])" :active="request()->routeIs('admin.keys.index', ['tag' => $tag->id])"> --}}
+                        <x-nav-link :href="route('admin.keys.index', ['tag' => $tag->id])">
                             <span value="{{ $tag->id }}">
                                 {{ $tag->name }}
                             </span>
@@ -34,8 +35,8 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button
-                            class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-                            <div>{{ Auth::user()->name }}</div>
+                            class="flex items-center text-sm font-medium text-white transition duration-150 ease-in-out">
+                            <div>メニュー</div>
 
                             <div class="ml-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -52,6 +53,12 @@
                         <form method="POST" action="{{ route('admin.logout') }}">
                             @csrf
 
+                            <x-dropdown-link :href="route('admin.keys.create')">
+                                キー登録
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('admin.tags.index')">
+                                タグ一覧
+                            </x-dropdown-link>
                             <x-dropdown-link :href="route('admin.logout')" onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                                 {{ __('Log Out') }}
@@ -66,11 +73,10 @@
                 <button @click="open = ! open"
                     class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex"
-                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden"
-                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
@@ -83,26 +89,33 @@
             {{-- <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link> --}}
-            <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+            {{-- <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                 ショートカットキー一覧
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
-                Excel
-            </x-responsive-nav-link>
+            </x-responsive-nav-link> --}}
+            @foreach ($tags as $tag)
+                <x-responsive-nav-link :href="route('admin.keys.index', ['tag' => $tag->id])">
+                    <span value="{{ $tag->id }}">
+                        {{ $tag->name }}
+                    </span>
+                </x-responsive-nav-link>
+            @endforeach
+
         </div>
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-            </div>
 
             <div class="mt-3 space-y-1">
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('admin.logout') }}">
                     @csrf
 
+                    <x-responsive-nav-link :href="route('admin.keys.create')">
+                        キー登録
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.tags.index')">
+                        タグ一覧
+                    </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('admin.logout')" onclick="event.preventDefault();
                                         this.closest('form').submit();">
                         {{ __('Log Out') }}
