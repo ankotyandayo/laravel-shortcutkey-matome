@@ -35,7 +35,8 @@
         <!-- Page Heading menu -->
         @if (auth('admin')->user())
             @include('layouts.admin-navigation')
-        @elseif(auth('users')->user())
+            {{-- @elseif(auth('users')->user()) --}}
+        @else
             @include('layouts.user-navigation')
         @endif
 

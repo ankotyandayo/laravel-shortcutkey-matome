@@ -10,29 +10,38 @@
                         <div class="container px-5 pt-2 mx-auto">
                             <x-flash-message />
                             @foreach ($detailtags as $detailtag)
-                                <div class="flex mb-4 ">
-                                    <h2 class="font-avenir-next font-semibold text-lg">
-                                        {{ $detailtag->name }}</h2>
-                                </div>
+                                <h2 class="font-avenir-next font-semibold text-lg relative border-l-6 color-border mb-4">
+                                    {{ $detailtag->name }}</h2>
                                 <div class="flex flex-wrap -m-2 mb-6">
                                     @foreach ($keys as $key)
                                         <div class="p-2 lg:w-1/3 md:w-1/2 w-full"
                                             {{ $key['detailtag_id'] == $detailtag['id'] ? '' : 'hidden' }}>
                                             <div class="h-full flex border-gray-200 border p-4 rounded-lg">
                                                 <div class="flex-grow">
-                                                    <h2 class="text-gray-900 font-avenir-next font-medium">
-                                                        {{ $key->key_1 }}
+                                                    <h2 class="font-avenir-next font-medium inline-block text-gray-700">
+                                                        <span class="key rounded-lg">
+                                                            {{ $key->key_1 }}
+                                                        </span>
                                                         @if (isset($key->key_2))
-                                                            <span class="text-gray-500">+</span> {{ $key->key_2 }}
+                                                            <span class="text-gray-500 ml-1">+</span>
+                                                            <span class="key rounded-lg ">
+                                                                {{ $key->key_2 }}
+                                                            </span>
                                                         @endif
                                                         @if (isset($key->key_3))
-                                                            <span class="text-gray-500">+</span> {{ $key->key_3 }}
+                                                            <span class="text-gray-500 ml-1">+</span>
+                                                            <span class="key rounded-lg ">
+                                                                {{ $key->key_3 }}
+                                                            </span>
                                                         @endif
                                                         @if (isset($key->key_4))
-                                                            <span class="text-gray-500">+</span> {{ $key->key_4 }}
+                                                            <span class="text-gray-500 ml-1">+</span>
+                                                            <span class="key rounded-lg ">
+                                                                {{ $key->key_4 }}
+                                                            </span>
                                                         @endif
                                                     </h2>
-                                                    <p class="pt-1 break-word">{{ $key->content }}</p>
+                                                    <p class="mt-4 break-word">{{ $key->content }}</p>
                                                 </div>
                                                 <div class="flex flex-col">
                                                     <button type="button"

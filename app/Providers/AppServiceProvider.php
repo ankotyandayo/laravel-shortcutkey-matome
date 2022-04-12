@@ -34,7 +34,9 @@ class AppServiceProvider extends ServiceProvider
 
             $detailtag_model = new Detailtag(); //インスタンス化
             $detailtags = $detailtag_model->getdetailtag();
-            $tags = Tag::where('admin_id', '=', \Auth::id())->get();
+            $tags = Tag::where('admin_id', '=', \Auth::id())
+                ->orderBy('id', 'ASC')
+                ->get();
 
             $view->with([
                 "keys" => $keys,

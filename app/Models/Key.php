@@ -41,7 +41,7 @@ class Key extends Model
                 ->leftJoin('tag_detailtags', 'tag_detailtags.key_id', '=', 'keys.id')
                 ->leftJoin('detailtags', 'tag_detailtags.detailtag_id', '=', 'detailtags.id')
                 ->where('key_tags.tag_id', '=', $query_tag)
-                ->orderBy('detailtag_id', 'DESC')
+                ->orderBy('detailtag_id', 'ASC')
                 ->get();
             // dd($keys);
         } else {

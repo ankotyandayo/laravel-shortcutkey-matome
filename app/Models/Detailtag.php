@@ -22,7 +22,7 @@ class Detailtag extends Model
             $detailtags = Detailtag::select('detailtags.id', 'detailtags.name')
                 ->leftJoin('tag_detailtags', 'tag_detailtags.detailtag_id', '=', 'detailtags.id')
                 ->where('tag_id', '=', $query_tag)
-                ->orderBy('id', 'DESC')
+                ->orderBy('id', 'ASC')
                 ->groupBy('id', 'name')
                 ->get();
             // dd($detailtags);
