@@ -25,9 +25,8 @@ class Detailtag extends Model
                 ->orderBy('id', 'ASC')
                 ->groupBy('id', 'name')
                 ->get();
-            // dd($detailtags);
         } else {
-            $detailtags = Detailtag::where('admin_id', '=', \Auth::id())->orderBy('id', 'DESC')->get();
+            $detailtags = Detailtag::orderBy('id', 'ASC')->get();
         }
         return $detailtags;
     }

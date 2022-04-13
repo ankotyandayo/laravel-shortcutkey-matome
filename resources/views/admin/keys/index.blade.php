@@ -16,8 +16,8 @@
                                     @foreach ($keys as $key)
                                         <div class="p-2 lg:w-1/3 md:w-1/2 w-full"
                                             {{ $key['detailtag_id'] == $detailtag['id'] ? '' : 'hidden' }}>
-                                            <div class="h-full flex border-gray-200 border p-4 rounded-lg">
-                                                <div class="flex-grow">
+                                            <div class="h-full flex border-gray-200 border rounded-lg">
+                                                <div class="flex-grow p-4">
                                                     <h2 class="font-avenir-next font-medium inline-block text-gray-700">
                                                         <span class="key rounded-lg">
                                                             {{ $key->key_1 }}
