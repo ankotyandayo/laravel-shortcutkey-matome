@@ -26,11 +26,6 @@ class KeysController extends Controller
 
     public function index()
     {
-        // phpinfo();
-        // $keys = Key::select('id', 'key_1', 'key_2', 'key_3', 'key_4', 'note', 'content')
-        //     ->whereNull('deleted_at')
-        //     ->orderBy('updated_at', 'DESC')
-        //     ->get();
         $query_tag = \Request::query('tag');
         if (!empty($query_tag)) {
             return view(

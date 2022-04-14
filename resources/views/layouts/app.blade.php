@@ -23,7 +23,10 @@
 
         <!-- Page Heading App name-->
         <header class="bg-white shadow">
-            <a href='{{ route('admin.dashboard') }}'>
+            <a
+                href='@if (auth('admin')->user()) {{ route('admin.dashboard') }}
+                @else
+                {{ route('user.welcome') }} @endif'>
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                     {{-- {{ $header }} --}}
                     <h2 class="font-semibold text-2xl text-gray-800 leading-tight font-Itim">

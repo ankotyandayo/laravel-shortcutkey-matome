@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\User\KeysController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,10 +17,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('user.welcome');
-});
+})->name('welcome');
 
-Route::get('/dashboard', function () {
-    return view('user.dashboard');
-});
+Route::get('keys', [KeysController::class, 'index'])->name('keys.index');
 
-require __DIR__ . '/auth.php';
+
+// require __DIR__ . '/auth.php';
