@@ -20,3 +20,4 @@ yarn-error.log
 /storage
 /config
 route.txt
+/database/seeders
