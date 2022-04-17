@@ -8,45 +8,32 @@
                             <x-flash-message />
                             <div class="flex flex-wrap -m-2 mb-6">
                                 @foreach ($tags as $tag)
-                                    <figure class="md:flex bg-slate-100 rounded-xl p-8 md:p-0 dark:bg-slate-800">
-                                        @if (empty($filename))
-                                            <img class="w-24 h-24 md:w-48 md:h-auto md:rounded-none rounded-full mx-auto"
-                                                src="/sarah-dayan.jpg" alt="" width="384" height="512">
-                                        @else
-                                            <img class="w-24 h-24 md:w-48 md:h-auto md:rounded-none rounded-full mx-auto"
-                                                src="{{ asset('storage/tags/' . $filename) }}" alt="" width="384"
-                                                height="512">
-                                        @endif
-                                        <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
-                                            <blockquote>
-                                                <p class="text-lg font-medium">
-                                                    “Tailwind CSS is the only framework that I've seen scale
-                                                    on large teams. It’s easy to customize, adapts to any design,
-                                                    and the build size is tiny.”
-                                                </p>
-                                            </blockquote>
-                                            <figcaption class="font-medium">
-                                                <div class="text-sky-500 dark:text-sky-400">
-                                                    Sarah Dayan
-                                                </div>
-                                                <div class="text-slate-700 dark:text-slate-500">
-                                                    Staff Engineer, Algolia
-                                                </div>
-                                            </figcaption>
-                                        </div>
-                                    </figure>
                                     <div class="p-2 lg:w-1/3 md:w-1/2 w-full">
-                                        <div class="h-full flex border-gray-200 border p-4 rounded-lg">
-                                            <div class="flex-grow">
-                                                <h2 class="text-gray-900 font-avenir-next font-medium">
-                                                    {{ $tag->name }}
-                                                </h2>
-                                            </div>
-                                            <div class="flex flex-col">
-                                                <button type="button"
-                                                    onclick="location.href='{{ route('admin.tags.edit', ['tag' => $tag->id]) }}'"
-                                                    class="text-white bg-indigo-400 border-0 py-0.5 px-1 focus:outline-none hover:bg-indigo-500 rounded mb-1">編集</button>
-                                            </div>
+                                        <div class="h-full flex border-gray-200 border p-6 rounded-xlg">
+                                            <figure class="flex">
+                                                @if (empty($tag->filename))
+                                                    <img class="md:rounded-none rounded-xlg rounded-full mx-auto"
+                                                        src="{{ asset('images/no_image_icon.png') }}" alt=""
+                                                        width="140" height="140">
+                                                @else
+                                                    <img class="md:rounded-none rounded-full mx-auto"
+                                                        src="{{ asset('storage/tags/' . $tag->filename) }}" alt=""
+                                                        width="140" height="140">
+                                                @endif
+                                                <div class="flex flex-col my-auto ml-6 lg:ml-6">
+                                                    <h2 class="text-gray-900 font-avenir-next font-medium text-lg">
+                                                        {{ $tag->name }}
+                                                    </h2>
+                                                    <div>
+                                                        <a href="{{ route('admin.keys.index', ['tag' => $tag->id]) }}"
+                                                            class="mt-6 itiranhe rounded-lg inline-block">
+                                                            <span value="{{ $tag->id }}">
+                                                                一覧へ
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </figure>
                                         </div>
                                     </div>
                                 @endforeach

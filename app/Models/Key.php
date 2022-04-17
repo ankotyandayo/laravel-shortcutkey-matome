@@ -37,18 +37,16 @@ class Key extends Model
         if (!empty($query_tag)) {
             $keys = Key::select('keys.*', 'tag_detailtags.detailtag_id')
                 ->leftJoin('key_tags', 'key_tags.key_id', '=', 'keys.id')
-                // ->leftJoin('tags', 'key_tags.tag_id', '=', 'tags.id')
                 ->leftJoin('tag_detailtags', 'tag_detailtags.key_id', '=', 'keys.id')
                 ->leftJoin('detailtags', 'tag_detailtags.detailtag_id', '=', 'detailtags.id')
                 ->where('key_tags.tag_id', '=', $query_tag)
-                ->orderBy('detailtag_id', 'DESC')
+                ->orderBy('detailtag_id', 'ASC')
                 ->get();
-            // dd($keys);
         } else {
 
-            $keys = Key::select('id', 'key_1', 'key_2', 'key_3', 'key_4', 'note', 'content')
+            $keys = Key::select('keys.*')
                 ->whereNull('deleted_at')
-                ->orderBy('updated_at', 'DESC')
+                ->orderBy('updated_at', 'ASC')
                 ->get();
         }
         return $keys;
